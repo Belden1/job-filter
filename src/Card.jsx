@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import './Filter.css';
+import './Card.css';
+import data from './data/data.json';
 
-function Card({ roles, levels, languages, tools, onFilterChange }) {
-	const [selectedFilters, setSelectedFilters] = useState([]);
-
+function Card({ filters, onFilterChange, selectedFilters, setSelectedFilters }) {
 	const handleFilterClick = (filterType, value) => {
 		const updatedFilters = [...selectedFilters];
 		const filterIdentifier = `${filterType}-${value}`;
@@ -18,18 +17,24 @@ function Card({ roles, levels, languages, tools, onFilterChange }) {
 		}
 
 		setSelectedFilters(updatedFilters);
-		onFilterChange(updatedFilters);
+		onFilterChange(filterType);
 	};
 
-	const handleClearFilters = () => {
-		setSelectedFilters([]);
-		onFilterChange([]);
-	};
+	const renderChips = (type, items) =>
+		items.map((item, index) => (
+			<div
+				key={`${type}-${index}`}
+				className={`chip ${selectedFilters.includes(`${type}-${item}`) ? 'selected' : ''}`}
+				onClick={() => handleFilterClick(type, item)}
+			>
+				{item}
+			</div>
+		));
 
 	return (
 		<>
-			<div style={{ border: '1px solid black' }}>
-				{/* <button onClick={handleFilterClick('role', role)}>Test</button> */}
+			<div className="right-card-container">
+				<div className="chips-test">{filters.map(({ type, values }) => renderChips(type, values))}</div>
 			</div>
 		</>
 	);

@@ -5,7 +5,7 @@ import './index.css';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 	<React.StrictMode>
-		<div className="main-container" style={{ backgroundColor: '#2D2D2D' }}>
+		<div className="main-container">
 			<App />
 		</div>
 	</React.StrictMode>

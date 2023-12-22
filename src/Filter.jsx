@@ -1,10 +1,34 @@
 import React from 'react';
+import './Filter.css';
 
-function Filter() {
+function Filter({ selectedFilters, onClearFilters }) {
+	const handleClearFiltersClick = () => {
+		onClearFilters();
+	};
+
+	const getValueFromFilter = (filter) => {
+		return filter.split('-')[1] || '';
+	};
+
 	return (
 		<>
-			<div style={{ border: '1px solid black' }}>
-				<p style={{ color: 'black' }}>Filter</p>
+			<div className="filter-container">
+				<div className="chips">
+					{selectedFilters.map((filter, index) => {
+						const value = getValueFromFilter(filter);
+						return (
+							value && (
+								<div key={index} className={'chip'}>
+									{value}
+								</div>
+							)
+						);
+					})}
+				</div>
+
+				<a className="clear" href="#" onClick={handleClearFiltersClick}>
+					Clear
+				</a>
 			</div>
 		</>
 	);
