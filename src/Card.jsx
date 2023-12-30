@@ -6,6 +6,8 @@ function Card({ filters, onFilterChange, selectedFilters, setSelectedFilters }) 
 	const [filteredJobs, setFilteredJobs] = useState(data);
 
 	useEffect(() => {
+		// console.log('Filters:', filters);
+		// console.log('Filtered Jobs:', filteredJobs);
 		// Apply filtering logic when filters change
 		const newFilteredJobs = data.filter((job) => {
 			return filters.every((filter) => {
@@ -27,6 +29,7 @@ function Card({ filters, onFilterChange, selectedFilters, setSelectedFilters }) 
 	}, [filters]);
 
 	const handleFilterClick = (filterType, value) => {
+		// console.log('Filter Click:', filterType, value);
 		const updatedFilters = [...selectedFilters];
 		const filterIdentifier = `${filterType}-${value}`;
 
@@ -43,34 +46,46 @@ function Card({ filters, onFilterChange, selectedFilters, setSelectedFilters }) 
 		onFilterChange(filterType);
 	};
 
-	const renderChips = (type, items) =>
-		items.map((item, index) => (
+	const renderChips = (job, type, items) => {
+		console.log('Rendering Chips:', type, items);
+
+		return items.map((item, index) => (
 			<div
 				key={`${type}-${index}`}
-				className={`chip ${selectedFilters.includes(`${type}-${item}`) ? 'selected' : ''}`}
-				onClick={() => handleFilterClick(type, item)}
+				className={`chip ${job && selectedFilters.includes(`${type}-${item}`) ? 'selected' : ''}`}
+				onClick={() => job && handleFilterClick(type, item)}
 			>
 				{item}
 			</div>
 		));
+	};
 
 	return (
 		<>
-			<div className="card">
-				<div className="left-card-container"></div>
-				<div className="right-card-container">
-					<div className="chips-test">{filters.map(({ type, values }) => renderChips(type, values))}</div>
-				</div>
-			</div>
+			{data.map((job) => (
+				<div key={job.id} className={`card${job.featured ? ' featured' : ''}`}>
+					<div className="left-card-container">
+						<img src={job.logo} alt={job.company} />
 
-			{/* Display the filtered jobs */}
-			<div className="filtered-jobs-container">
-				{filteredJobs.map((job) => (
-					<div key={job.id} className={`test-card ${job.featured ? 'featured' : ''}`}>
-						{/* Render job details here */}
+						<div className="text-card-container">
+							<div className="text-card-header">
+								<p className="company">{job.company}</p>
+								{job.new && <p className="text-chip">New!</p>}
+								{job.featured && <p className="text-chip">Featured</p>}
+							</div>
+
+							<h2>{job.position}</h2>
+
+							<div className="text-card-footer">
+								<p className="footer-text">{`${job.postedAt} • ${job.contract} • ${job.location}`}</p>
+							</div>
+						</div>
 					</div>
-				))}
-			</div>
+					<div className="right-card-container">
+						{filters.map(({ type, values }) => renderChips(job, type, values))}
+					</div>
+				</div>
+			))}
 		</>
 	);
 }
