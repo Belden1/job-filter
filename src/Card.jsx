@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Card.css';
 import data from './data/data.json';
 
-function Card({ filters, onFilterChange, selectedFilters, setSelectedFilters }) {
+function Card({ selectedFilters, setSelectedFilters, onFilterChange }) {
 	const [filteredJobs, setFilteredJobs] = useState(data);
 
 	useEffect(() => {
@@ -33,18 +33,6 @@ function Card({ filters, onFilterChange, selectedFilters, setSelectedFilters }) 
 		onFilterChange(filterType);
 	};
 
-	const renderChips = (job, type, items) => {
-		return items.map((item, index) => (
-			<div
-				key={`${type}-${index}`}
-				className={`chip${job && selectedFilters.includes(`${type}-${item}`) ? ' selected' : ''}`}
-				onClick={() => job && handleFilterClick(type, item)}
-			>
-				{item}
-			</div>
-		));
-	};
-
 	return (
 		<>
 			{filteredJobs.map((job) => (
@@ -65,15 +53,40 @@ function Card({ filters, onFilterChange, selectedFilters, setSelectedFilters }) 
 						</div>
 					</div>
 					<div className="right-card-container">
-						<p>{job.role}</p>
-						<p>{job.level}</p>
+						<div
+							className={`chip${job && selectedFilters.includes(`role-${job.role}`) ? ' selected' : ''}`}
+							onClick={() => job && handleFilterClick('role', job.role)}
+						>
+							{job.role}
+						</div>
+						<div
+							className={`chip${
+								job && selectedFilters.includes(`level-${job.level}`) ? ' selected' : ''
+							}`}
+							onClick={() => job && handleFilterClick('level', job.level)}
+						>
+							{job.level}
+						</div>
 						{job.languages.map((item, index) => (
-							<p key={index}>{item}</p>
+							<div
+								key={index}
+								className={`chip${
+									job && selectedFilters.includes(`language-${item}`) ? ' selected' : ''
+								}`}
+								onClick={() => job && handleFilterClick('language', item)}
+							>
+								{item}
+							</div>
 						))}
 						{job.tools.map((item, index) => (
-							<p key={index}>{item}</p>
+							<div
+								key={index}
+								className={`chip${job && selectedFilters.includes(`tool-${item}`) ? ' selected' : ''}`}
+								onClick={() => job && handleFilterClick('tool', item)}
+							>
+								{item}
+							</div>
 						))}
-						{filters.map(({ type, values }) => renderChips(job, type, values))}
 					</div>
 				</div>
 			))}
@@ -82,3 +95,32 @@ function Card({ filters, onFilterChange, selectedFilters, setSelectedFilters }) 
 }
 
 export default Card;
+
+// const handleFilterClick = (filterType, value) => {
+// 	const updatedFilters = [...selectedFilters];
+// 	const filterIdentifier = `${filterType}-${value}`;
+
+// 	const isSelected = updatedFilters.includes(filterIdentifier);
+
+// 	if (isSelected) {
+// 		const index = updatedFilters.indexOf(filterIdentifier);
+// 		updatedFilters.splice(index, 1);
+// 	} else {
+// 		updatedFilters.push(filterIdentifier);
+// 	}
+
+// 	setSelectedFilters(updatedFilters);
+// 	onFilterChange(filterType);
+// };
+
+// const renderChips = (job, type, items) => {
+// 	return items.map((item, index) => (
+// 	  <div
+// 		key={`${type}-${index}`}
+// 		className={`chip${job && selectedFilters.includes(`${type}-${item}`) ? ' selected' : ''}`}
+// 		onClick={() => job && handleFilterClick(type, item)}
+// 	  >
+// 		{item}
+// 	  </div>
+// 	));
+//   };
