@@ -58,24 +58,21 @@ function Card({ filters, onFilterChange, selectedFilters, setSelectedFilters }) 
 								{job.featured && <p className="text-chip">Featured</p>}
 							</div>
 							<h2>{job.position}</h2>
-							<p>
-								<strong>Roles:</strong> {job.role}
-							</p>
-							<p>
-								<strong>Level:</strong> {job.level}
-							</p>
-							<p>
-								<strong>Languages:</strong> {job.languages.join(', ')}
-							</p>
-							<p>
-								<strong>Tools:</strong> {job.tools.join(', ')}
-							</p>
+
 							<div className="text-card-footer">
 								<p className="footer-text">{`${job.postedAt} • ${job.contract} • ${job.location}`}</p>
 							</div>
 						</div>
 					</div>
 					<div className="right-card-container">
+						<p>{job.role}</p>
+						<p>{job.level}</p>
+						{job.languages.map((item, index) => (
+							<p key={index}>{item}</p>
+						))}
+						{job.tools.map((item, index) => (
+							<p key={index}>{item}</p>
+						))}
 						{filters.map(({ type, values }) => renderChips(job, type, values))}
 					</div>
 				</div>
