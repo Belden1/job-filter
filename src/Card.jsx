@@ -6,8 +6,15 @@ function Card({ filters, onFilterChange, selectedFilters, setSelectedFilters }) 
 	const [filteredJobs, setFilteredJobs] = useState(data);
 
 	useEffect(() => {
-		setFilteredJobs(data);
-	}, [filters]);
+		// Filter jobs based on selected filters
+		const filtered = data.filter((job) =>
+			selectedFilters.every((filter) => {
+				const [type, value] = filter.split('-');
+				return job[type] === value || (job[type] && job[type].includes(value));
+			})
+		);
+		setFilteredJobs(filtered);
+	}, [selectedFilters]);
 
 	const handleFilterClick = (filterType, value) => {
 		const updatedFilters = [...selectedFilters];
@@ -51,6 +58,18 @@ function Card({ filters, onFilterChange, selectedFilters, setSelectedFilters }) 
 								{job.featured && <p className="text-chip">Featured</p>}
 							</div>
 							<h2>{job.position}</h2>
+							<p>
+								<strong>Roles:</strong> {job.role}
+							</p>
+							<p>
+								<strong>Level:</strong> {job.level}
+							</p>
+							<p>
+								<strong>Languages:</strong> {job.languages.join(', ')}
+							</p>
+							<p>
+								<strong>Tools:</strong> {job.tools.join(', ')}
+							</p>
 							<div className="text-card-footer">
 								<p className="footer-text">{`${job.postedAt} • ${job.contract} • ${job.location}`}</p>
 							</div>
