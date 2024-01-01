@@ -4,6 +4,7 @@ import data from './data/data.json';
 
 function Card({ selectedFilters, setSelectedFilters, onFilterChange }) {
 	const [filteredJobs, setFilteredJobs] = useState(data);
+	const [displayedJobs, setDisplayedJobs] = useState([]);
 
 	useEffect(() => {
 		// Filter jobs based on selected filters
@@ -13,7 +14,14 @@ function Card({ selectedFilters, setSelectedFilters, onFilterChange }) {
 				return job[type] === value || (job[type] && job[type].includes(value));
 			})
 		);
+		console.log('1. Filtered Jobs:', filtered);
 		setFilteredJobs(filtered);
+	}, [selectedFilters]);
+
+	useEffect(() => {
+		// Display only the new filters
+		const newFilters = selectedFilters.filter((filter) => !displayedJobs.includes(filter));
+		setDisplayedJobs((prevDisplayedJobs) => [...prevDisplayedJobs, ...newFilters]);
 	}, [selectedFilters]);
 
 	const handleFilterClick = (filterType, value) => {
@@ -32,6 +40,9 @@ function Card({ selectedFilters, setSelectedFilters, onFilterChange }) {
 		setSelectedFilters(updatedFilters);
 		onFilterChange(filterType);
 	};
+
+	console.log('2. Filtered Jobs State:', filteredJobs);
+	console.log('3. Displayed Filters:', displayedJobs);
 
 	return (
 		<>
@@ -95,23 +106,6 @@ function Card({ selectedFilters, setSelectedFilters, onFilterChange }) {
 }
 
 export default Card;
-
-// const handleFilterClick = (filterType, value) => {
-// 	const updatedFilters = [...selectedFilters];
-// 	const filterIdentifier = `${filterType}-${value}`;
-
-// 	const isSelected = updatedFilters.includes(filterIdentifier);
-
-// 	if (isSelected) {
-// 		const index = updatedFilters.indexOf(filterIdentifier);
-// 		updatedFilters.splice(index, 1);
-// 	} else {
-// 		updatedFilters.push(filterIdentifier);
-// 	}
-
-// 	setSelectedFilters(updatedFilters);
-// 	onFilterChange(filterType);
-// };
 
 // const renderChips = (job, type, items) => {
 // 	return items.map((item, index) => (
